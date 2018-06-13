@@ -63,7 +63,7 @@ namespace BasketTest
             }
         }
 
-        [TestMethod]
+        /*[TestMethod]
         [DynamicData("Baskets")]
         public void ReturnCorrectAmoutGivenBasket(BasketTest basketTest)
         {
@@ -78,6 +78,8 @@ namespace BasketTest
                 var jsonPath = Path.Combine(assemblyDirectory, "article-database.json");
                 IList < ArticleDatabase > articleDatabases = JsonConvert.DeserializeObject<List<ArticleDatabase>>(File.ReadAllText(jsonPath));
                 var article = articleDatabases.First(articleDatabase =>articleDatabase.Id == basketLineArticle.Id);
+
+
                 // Calculate amount
                 var amount = 0;
                 switch (article.Category)
@@ -94,6 +96,17 @@ namespace BasketTest
                 }
                 amountTotal += amount * basketLineArticle.Number;
             }
+            Assert.AreEqual(amountTotal, basketTest.ExpectedPrice);
+        }*/
+
+        [TestMethod]
+        [DynamicData("Baskets")]
+        public void ReturnCorrectAmoutGivenBasket(BasketTest basketTest)
+        {
+            var basKetService = new Basket.OrientedObject.Infrastructure.BasketService(new Basket.OrientedObject.Infrastructure.ArticleDatabaseMock());
+            // var basKetService = new BasketService(new ArticleDatabaseJson());
+            var basketOperation = new BasketOperation(basKetService);
+            var amountTotal = basketOperation.CalculateAmout(basketTest.BasketLineArticles);
             Assert.AreEqual(amountTotal, basketTest.ExpectedPrice);
         }
     }
